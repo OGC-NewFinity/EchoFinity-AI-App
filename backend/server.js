@@ -14,6 +14,7 @@ app.use(cors());
 // Routes
 app.use('/api', require('./routes/health'));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/projects', require('./routes/projects'));
 
 // Centralized error handler (must be last middleware)
 app.use(errorHandler);

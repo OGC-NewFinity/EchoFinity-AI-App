@@ -36,4 +36,76 @@ const validateLogin = [
   },
 ];
 
-module.exports = { validateRegister, validateLogin };
+const validateProjectCreate = [
+  check('title')
+    .notEmpty()
+    .withMessage('Title is required')
+    .trim()
+    .isLength({ min: 1, max: 255 })
+    .withMessage('Title must be between 1 and 255 characters'),
+  check('description')
+    .optional()
+    .isString()
+    .withMessage('Description must be a string'),
+  check('status')
+    .optional()
+    .isIn(['draft', 'editing', 'processing', 'completed'])
+    .withMessage('Status must be one of: draft, editing, processing, completed'),
+  check('clips')
+    .optional()
+    .custom((value) => {
+      // Allow null, undefined, or valid JSON/array
+      if (value === null || value === undefined) return true;
+      if (Array.isArray(value)) return true;
+      if (typeof value === 'object') return true;
+      return false;
+    })
+    .withMessage('Clips must be an array or object'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+const validateProjectUpdate = [
+  check('title')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 255 })
+    .withMessage('Title must be between 1 and 255 characters'),
+  check('description')
+    .optional()
+    .isString()
+    .withMessage('Description must be a string'),
+  check('status')
+    .optional()
+    .isIn(['draft', 'editing', 'processing', 'completed'])
+    .withMessage('Status must be one of: draft, editing, processing, completed'),
+  check('clips')
+    .optional()
+    .custom((value) => {
+      // Allow null, undefined, or valid JSON/array
+      if (value === null || value === undefined) return true;
+      if (Array.isArray(value)) return true;
+      if (typeof value === 'object') return true;
+      return false;
+    })
+    .withMessage('Clips must be an array or object'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+module.exports = {
+  validateRegister,
+  validateLogin,
+  validateProjectCreate,
+  validateProjectUpdate,
+};

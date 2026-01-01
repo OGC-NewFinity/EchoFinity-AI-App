@@ -197,8 +197,7 @@ cd echofinity-ai-app
 #### 2. Mobile App Setup
 
 ```bash
-# Install dependencies
-cd mobile
+# Install dependencies (from project root)
 npm install
 
 # iOS (macOS only)
@@ -211,6 +210,9 @@ npm run ios
 
 # Run on Android
 npm run android
+
+# Start Metro bundler
+npm start
 ```
 
 #### 3. Backend Setup
