@@ -4,7 +4,7 @@
  */
 
 const request = require('supertest');
-const { createTestApp } = require('./app.test');
+const { createTestApp, mockQueueAdd } = require('./app.test');
 
 // Mock models
 const mockUserFindOne = jest.fn();
@@ -169,8 +169,8 @@ describe('Video Flow E2E Tests', () => {
     let videoId;
 
     beforeEach(() => {
-      projectId = 'project-123';
-      videoId = 'video-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
+      videoId = '123e4567-e89b-12d3-a456-426614174001'; // Valid UUID format
 
       // Mock project creation
       const mockProject = {
@@ -191,7 +191,7 @@ describe('Video Flow E2E Tests', () => {
       mockProjectCreate.mockResolvedValue(mockProject);
       mockProjectFindOne.mockResolvedValue(mockProject);
 
-      // Mock video creation
+      // Mock video creation - ensure id is accessible
       const mockVideo = {
         id: videoId,
         filename: 'export_123.mp4',
@@ -218,6 +218,7 @@ describe('Video Flow E2E Tests', () => {
         }),
       };
 
+      // Ensure the mock returns a video with id property
       mockVideoCreate.mockResolvedValue(mockVideo);
       mockVideoFindByPk.mockResolvedValue(mockVideo);
     });
@@ -252,6 +253,11 @@ describe('Video Flow E2E Tests', () => {
           resolution: '1080p',
         });
 
+      // Debug: log error if request failed
+      if (exportResponse.status !== 202) {
+        // eslint-disable-next-line no-console
+        console.log('Export failed - Status:', exportResponse.status, 'Body:', exportResponse.body);
+      }
       expect(exportResponse.status).toBe(202);
       expect(exportResponse.body.jobId).toBeDefined();
       expect(exportResponse.body.status).toBe('queued');
@@ -264,7 +270,7 @@ describe('Video Flow E2E Tests', () => {
         })
       );
       expect(mockVideoCreate).toHaveBeenCalled();
-      expect(videoExportQueue.add).toHaveBeenCalled();
+      expect(mockQueueAdd).toHaveBeenCalled();
     });
 
     it('should verify project ownership before export', async () => {
@@ -275,7 +281,7 @@ describe('Video Flow E2E Tests', () => {
         .post('/api/videos/export')
         .set('Authorization', `Bearer ${testToken}`)
         .send({
-          projectId: 'wrong-project',
+          projectId: '00000000-0000-0000-0000-000000000000', // Valid UUID but not found
           format: 'mp4',
           resolution: '1080p',
         });
@@ -309,6 +315,21 @@ describe('Video Flow E2E Tests', () => {
       // Simulate AI processing (normally done by videoProcessor job)
       const video = await require('../../models').Video.findByPk(videoId);
 
+      // Reset AI service mocks before each call
+      aiService.detectScenes.mockResolvedValue([
+        { start: 0, end: 5 },
+        { start: 5, end: 10 },
+        { start: 10, end: 15 },
+      ]);
+      aiService.generateSubtitles.mockResolvedValue([
+        { start: 0, end: 2, text: 'Hello world' },
+        { start: 2, end: 4, text: 'This is a test' },
+        { start: 4, end: 6, text: 'Welcome to EchoFinity' },
+      ]);
+      aiService.applyColorCorrection.mockResolvedValue({
+        correctedPath: '/mock/color-corrected-video.mp4',
+      });
+
       // Simulate AI calls
       const scenes = await aiService.detectScenes(video.filePath);
       const subtitles = await aiService.generateSubtitles(video.filePath);
@@ -328,10 +349,17 @@ describe('Video Flow E2E Tests', () => {
     });
 
     it('should handle AI service partial failures gracefully', async () => {
-      // Mock one service to fail
-      aiService.generateSubtitles.mockRejectedValueOnce(new Error('Service unavailable'));
-
       const video = await require('../../models').Video.findByPk(videoId);
+
+      // Reset mocks
+      aiService.detectScenes.mockResolvedValue([
+        { start: 0, end: 5 },
+        { start: 5, end: 10 },
+      ]);
+      aiService.generateSubtitles.mockRejectedValueOnce(new Error('Service unavailable'));
+      aiService.applyColorCorrection.mockResolvedValue({
+        correctedPath: '/mock/color-corrected-video.mp4',
+      });
 
       // Scene detection should still work
       const scenes = await aiService.detectScenes(video.filePath);
@@ -354,7 +382,7 @@ describe('Video Flow E2E Tests', () => {
     beforeEach(() => {
       jobId = 'job-123';
       videoId = 'video-123';
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000';
 
       const mockVideo = {
         id: videoId,

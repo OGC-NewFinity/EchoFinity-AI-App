@@ -126,7 +126,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     let mockVideo;
 
     beforeEach(() => {
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
       videoId = 'video-123';
 
       mockProject = {
@@ -253,7 +253,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     let projectId;
 
     beforeEach(() => {
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
 
       const mockProject = {
         id: projectId,
@@ -294,7 +294,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     let videoId;
 
     beforeEach(() => {
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
       videoId = 'video-123';
 
       const mockProject = {
@@ -394,7 +394,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     let projectId;
 
     beforeEach(() => {
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
 
       const mockProject = {
         id: projectId,
@@ -467,7 +467,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     let videoId;
 
     beforeEach(() => {
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
       videoId = 'video-123';
 
       const mockProject = {
@@ -556,7 +556,7 @@ describe('Export Flow E2E Tests - Token Deduction', () => {
     beforeEach(() => {
       jobId = 'job-123';
       videoId = 'video-123';
-      projectId = 'project-123';
+      projectId = '123e4567-e89b-12d3-a456-426614174000'; // Valid UUID format
 
       const mockProject = {
         id: projectId,

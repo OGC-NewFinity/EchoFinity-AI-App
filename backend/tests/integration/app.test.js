@@ -23,16 +23,20 @@ jest.mock('../../config/redis', () => ({
   connectRedis: jest.fn().mockResolvedValue(true),
 }));
 
-jest.mock('../../config/queue', () => ({
-  videoExportQueue: {
-    add: jest.fn().mockResolvedValue({
-      id: 'mock-job-id',
-      data: {},
-    }),
-    on: jest.fn(),
-    process: jest.fn(),
-  },
-}));
+// Mock queue - define mockAdd inside the factory to ensure it's a jest.fn()
+jest.mock('../../config/queue', () => {
+  const mockAdd = jest.fn().mockResolvedValue({
+    id: 'mock-job-id',
+    data: {},
+  });
+  return {
+    videoExportQueue: {
+      add: mockAdd,
+      on: jest.fn(),
+      process: jest.fn(),
+    },
+  };
+});
 
 jest.mock('../../jobs/videoProcessor', () => ({
   // Mock video processor - don't start any workers
@@ -103,6 +107,12 @@ function createTestApp() {
   return app;
 }
 
+// Export mockQueueAdd for use in tests (access the mocked function)
+// Note: This must be done after the mock is set up, so we get it from the mocked module
+const { videoExportQueue } = require('../../config/queue');
+const mockQueueAdd = videoExportQueue.add;
+
 module.exports = {
   createTestApp,
+  mockQueueAdd,
 };
