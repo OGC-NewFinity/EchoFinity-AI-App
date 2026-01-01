@@ -13,8 +13,8 @@
     "test:unit": "jest --testPathIgnorePatterns=tests/integration",
     "lint": "eslint . --ext .js --ignore-pattern node_modules --ignore-pattern coverage --ignore-pattern '*.config.js'",
     "lint:fix": "eslint . --ext .js --fix --ignore-pattern node_modules --ignore-pattern coverage --ignore-pattern '*.config.js'",
-    "format": "prettier --write \"**/*.{js,json,md}\" --ignore-path .gitignore",
-    "format:check": "prettier --check \"**/*.{js,json,md}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{js,json,md}\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"**/*.{js,json,md}\" --ignore-path .prettierignore"
   },
   "keywords": [
     "echofinity",
