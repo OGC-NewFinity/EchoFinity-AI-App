@@ -1,3 +1,10 @@
+---
+title: EchoFinity - Cursor Development Guide
+version: 1.0
+updated: 2025
+status: active
+---
+
 # EchoFinity - Cursor Development Guide
 
 **Application**: EchoFinity - AI-Powered Video Creation & Editing Platform  

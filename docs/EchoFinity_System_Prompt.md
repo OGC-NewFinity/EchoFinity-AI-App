@@ -1,3 +1,10 @@
+---
+title: EchoFinity - Comprehensive System Prompt
+version: 1.0
+updated: 2025
+status: active
+---
+
 # EchoFinity - Comprehensive System Prompt
 
 **Application**: EchoFinity - AI-Powered Video Creation & Editing Platform  

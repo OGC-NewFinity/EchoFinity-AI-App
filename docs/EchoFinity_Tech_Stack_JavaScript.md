@@ -1,3 +1,10 @@
+---
+title: EchoFinity - Tech Stack & Development Guide (JavaScript)
+version: 1.0
+updated: 2025
+status: active
+---
+
 # EchoFinity - Tech Stack & Development Guide (JavaScript)
 
 **Application**: EchoFinity - AI-Powered Video Creation & Editing Platform  

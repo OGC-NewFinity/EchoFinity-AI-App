@@ -1,3 +1,10 @@
+---
+title: EchoFinity - Application Classification & Product Positioning
+version: 1.0
+updated: 2025
+status: active
+---
+
 # EchoFinity - Application Classification & Product Positioning
 
 **Developer**: OGC NewFinity  
