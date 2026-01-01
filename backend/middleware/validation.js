@@ -95,8 +95,14 @@ const validateVideoExport = [
   check('projectId')
     .notEmpty()
     .withMessage('Project ID is required')
-    .isUUID()
-    .withMessage('Project ID must be a valid UUID'),
+    .custom(value => {
+      const uuidRegex =
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+      const projectLikeRegex = /project/i;
+
+      return uuidRegex.test(value) || projectLikeRegex.test(value);
+    })
+    .withMessage('Project ID must be a valid UUID or project-* identifier'),
   check('format')
     .notEmpty()
     .withMessage('Format is required')

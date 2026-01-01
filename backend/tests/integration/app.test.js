@@ -11,6 +11,10 @@ jest.mock('../../config/database', () => {
   const mockSequelize = {
     authenticate: jest.fn().mockResolvedValue(true),
     sync: jest.fn().mockResolvedValue(true),
+    define: jest.fn(() => ({
+      hasMany: jest.fn(),
+      belongsTo: jest.fn(),
+    })),
     literal: jest.fn(sql => sql),
     where: jest.fn((fn, value) => ({ fn, value })),
     fn: jest.fn(fn => ({ fn })),
@@ -19,9 +23,17 @@ jest.mock('../../config/database', () => {
   return mockSequelize;
 });
 
-jest.mock('../../config/redis', () => ({
-  connectRedis: jest.fn().mockResolvedValue(true),
-}));
+jest.mock('../../config/redis', () => {
+  const redisClient = {
+    isOpen: true,
+    ping: jest.fn().mockResolvedValue('PONG'),
+  };
+
+  return {
+    redisClient,
+    connectRedis: jest.fn().mockResolvedValue(true),
+  };
+});
 
 jest.mock('../../config/queue', () => ({
   videoExportQueue: {
@@ -106,3 +118,14 @@ function createTestApp() {
 module.exports = {
   createTestApp,
 };
+
+// Basic sanity check to ensure the helper creates an app with routes configured
+describe('createTestApp helper', () => {
+  it('should bootstrap an express app with registered routes', () => {
+    const app = createTestApp();
+    expect(app).toBeDefined();
+
+    expect(typeof app).toBe('function');
+    expect(app._router).toBeDefined();
+  });
+});

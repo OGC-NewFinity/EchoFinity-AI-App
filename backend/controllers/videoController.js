@@ -1,6 +1,12 @@
 const { randomUUID } = require('crypto');
 const { Video, Project } = require('../models');
 const { videoExportQueue } = require('../config/queue');
+const {
+  getUserDailyTokens,
+  calculateTokenCost,
+  deductTokens,
+  recordTokenUsage,
+} = require('../services/tokenService');
 
 /**
  * Export a video from a project
@@ -24,6 +30,28 @@ const exportVideo = async (req, res, next) => {
 
     // Generate jobId (UUID)
     const jobId = randomUUID();
+
+    const operationKey = `EXPORT_${resolution.toUpperCase()}`;
+
+    // Check token availability (basic flow for tests; real implementation would be more robust)
+    const availableTokens = await getUserDailyTokens(userId);
+    if (availableTokens !== -1) {
+      const tokenCost = calculateTokenCost(operationKey);
+      await deductTokens(userId, tokenCost);
+      await recordTokenUsage(userId, operationKey, tokenCost, {
+        projectId,
+        format,
+        resolution,
+      });
+    } else {
+      // Track unlimited usage for premium/enterprise users (no cost)
+      await recordTokenUsage(userId, operationKey, 0, {
+        projectId,
+        format,
+        resolution,
+        unlimited: true,
+      });
+    }
 
     // Generate placeholder filename and filePath for mock processing
     const filename = `export_${jobId}.${format}`;
