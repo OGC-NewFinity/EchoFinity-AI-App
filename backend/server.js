@@ -4,6 +4,8 @@ const cors = require('cors');
 const { sequelize } = require('./models');
 const { connectRedis } = require('./config/redis');
 const errorHandler = require('./middleware/errorHandler');
+// Initialize video processor (starts queue worker)
+require('./jobs/videoProcessor');
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(cors());
 app.use('/api', require('./routes/health'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/videos', require('./routes/videos'));
+app.use('/api/export', require('./routes/export'));
 
 // Centralized error handler (must be last middleware)
 app.use(errorHandler);

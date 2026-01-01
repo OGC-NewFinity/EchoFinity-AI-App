@@ -7,6 +7,7 @@ This folder contains utility scripts for the EchoFinity backend.
 Test script to verify database connection and model synchronization.
 
 Run with:
+
 ```bash
 node scripts/test-db.js
 ```

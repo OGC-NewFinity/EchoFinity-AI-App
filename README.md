@@ -7,6 +7,7 @@
 [![Version](https://img.shields.io/badge/version-1.0-blue.svg)](https://github.com/ogcnewfinity/echofinity)
 [![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey.svg)](https://github.com/ogcnewfinity/echofinity)
+[![CI](https://github.com/ogcnewfinity/echofinity/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ogcnewfinity/echofinity/actions/workflows/ci.yml)
 
 **AI-Powered Video Creation & Editing Platform**
 

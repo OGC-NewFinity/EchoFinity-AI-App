@@ -5,6 +5,7 @@ const { DataTypes } = require('sequelize');
 const User = require('./User')(sequelize, DataTypes);
 const Project = require('./Project')(sequelize, DataTypes);
 const Video = require('./Video')(sequelize, DataTypes);
+const TokenUsage = require('./TokenUsage')(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Project, {
@@ -27,10 +28,22 @@ Video.belongsTo(Project, {
   as: 'project',
 });
 
+// TokenUsage associations
+User.hasMany(TokenUsage, {
+  foreignKey: 'userId',
+  as: 'tokenUsage',
+});
+
+TokenUsage.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'user',
+});
+
 // Export models and sequelize instance
 module.exports = {
   sequelize,
   User,
   Project,
   Video,
+  TokenUsage,
 };

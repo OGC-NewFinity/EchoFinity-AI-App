@@ -14,7 +14,7 @@ router.post('/register', validateRegister, async (req, res, next) => {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(409).json({
-        error: 'User with this email already exists'
+        error: 'User with this email already exists',
       });
     }
 
@@ -31,11 +31,9 @@ router.post('/register', validateRegister, async (req, res, next) => {
     });
 
     // Generate JWT token
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -61,7 +59,7 @@ router.post('/login', validateLogin, async (req, res, next) => {
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(401).json({
-        error: 'Invalid email or password'
+        error: 'Invalid email or password',
       });
     }
 
@@ -69,16 +67,14 @@ router.post('/login', validateLogin, async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({
-        error: 'Invalid email or password'
+        error: 'Invalid email or password',
       });
     }
 
     // Generate JWT token
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
 
     res.json({
       message: 'Login successful',

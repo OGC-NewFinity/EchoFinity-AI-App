@@ -8,7 +8,7 @@ const redisClient = redis.createClient({
   password: process.env.REDIS_PASSWORD || undefined,
 });
 
-redisClient.on('error', (err) => console.error('Redis Error:', err));
+redisClient.on('error', err => console.error('Redis Error:', err));
 
 const connectRedis = async () => {
   if (!redisClient.isOpen) {

@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     status: {
-      type: DataTypes.ENUM('uploading', 'processing', 'ready', 'failed'),
+      type: DataTypes.ENUM('uploading', 'processing', 'ready', 'failed', 'partial'),
       defaultValue: 'uploading',
     },
   });
